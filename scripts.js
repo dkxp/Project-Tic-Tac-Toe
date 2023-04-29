@@ -34,7 +34,6 @@ const gameboardObj = (() => {
             document.getElementById(`${i}`).addEventListener('click', markXO);
         }
     }
-
     function checkWinner(parameter) {
         for (let i = 0; i < 9; i++) {
             document.getElementById(`${i}`).addEventListener('click', checkWinner)
@@ -90,13 +89,8 @@ const gameboardObj = (() => {
             document.getElementById('gameStatusDisplay').innerHTML = '<strong>Tie game!</strong>'
         }
     }
-
     return {gameBoardArray, newGameBoard, addNewGameBoxClickEvent};
 })();
-
-const playerFactory = (name) => {
-    return {name};
-};
 
 gameboardObj.newGameBoard();
 
