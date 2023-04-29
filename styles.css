@@ -83,5 +83,13 @@ button {
     font-size: 25px;
     font-family: 'JetBrains Mono', monospace;
     color: #38393f;
-    font-weight: 400;
+    font-weight: 500;
+    color: #eb5a54;
+    background-color: rgb(124, 246, 79);
+    border-color: white;
+    border-style: dotted;
+    border-width: 5px;
+}
+button:hover {
+    background-color:  rgb(96, 186, 63);
 }
