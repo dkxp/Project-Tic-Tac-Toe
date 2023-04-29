@@ -7,8 +7,20 @@
     <title>Document</title>
     <link rel="stylesheet" href="./styles.css">
     <script src="./scripts.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300&family=Nunito:wght@200&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&family=Nunito+Sans:wght@300&family=Nunito:wght@200&family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
 </head>
 <body>
+    <div class="header">
+        <div>Tic-Tac-Toe</div>
+        <div id="gameStatusDisplay"><strong>Player 1</strong>, make your move</div>
+    </div>
    <div class="container">
         <div class="flexrow">
             <div class="box" id="0"></div>
@@ -25,6 +37,8 @@
             <div class="box" id="7"></div>
             <div class="box" id="8"></div>
         </div>
-   </div> 
+   </div>
+   <button onclick = "gameboardObj.newGameBoard()" > New Game </button>
+
 </body>
 </html>

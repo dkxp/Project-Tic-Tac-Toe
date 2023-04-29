@@ -3,20 +3,85 @@ body {
     margin: 0;
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
+    background-color: rgb(246,215,79);
 }
 .container {
     grid-row: 2;
 }
 .box {
-    background-color: rgb(54,79,107);
+    background-color: rgb(162,206,221);
     height: 150px;
     width: 150px;
-    margin: 7px;
+    margin: 5px;
     font-size: 100px;
     color: white;
     text-align: center;
+    border-style: dashed;
+    border-color: white;
+    border-width: 8px;
+}
+.box:hover {
+    background-color: rgb(142,191,208);
 }
 .flexrow {
     display: flex;
     justify-content: center;
+}
+.header {
+    grid-template-rows: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;  
+}
+.header div:first-of-type {
+    font-size: 90px;
+    font-family: 'Pacifico', cursive;
+    color: #eb5a54;
+}
+#gameStatusDisplay {
+    font-size: 25px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #38393f;
+    font-weight: 400;
+}
+#heart {
+    font-size: 65px;
+    color: rgb(235,90,84);
+}
+#bolt {
+    font-size: 90px;
+    color: rgb(202,176,57);
+}
+.heart {
+    background-color: rgb(247,146,143);
+}
+.bolt {
+    background-color: rgb(255,234,140);
+}
+.box.bolt:hover {
+    background-color: rgb(255,234,140);
+}
+.box.heart:hover {
+    background-color: rgb(247,146,143);
+}
+.box.bolt {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+.box.heart {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+button {
+    margin: 0 auto;
+    height: 100px;
+    width: 175px;
+    margin-top: 25px;
+    font-size: 25px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #38393f;
+    font-weight: 400;
 }

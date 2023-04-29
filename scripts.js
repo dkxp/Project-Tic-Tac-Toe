@@ -3,29 +3,35 @@ const gameboardObj = (() => {
     function newGameBoard () {
         for (let i = 0; i < 9; i++) {
             gameBoardArray[i] = '';
-            document.getElementById(`${i}`).textContent = '';
+            document.getElementById(`${i}`).innerHTML = '';
+            document.getElementById(`${i}`).classList.remove('bolt');
+            document.getElementById(`${i}`).classList.remove('heart');
+            document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 1</strong>, make your move';
         }
         addNewGameBoxClickEvent();
     }
-
     function addNewGameBoxClickEvent() {
         let currentPlayer = 'X';
         function markXO() {
             if (currentPlayer === 'X') {
                 currentPlayer = '0';
-                this.textContent = 'X';
+                this.innerHTML = '<i class="material-icons" id="bolt">bolt</i>';
+                this.classList.add('bolt');
                 this.removeEventListener('click', markXO);
                 gameBoardArray[parseInt(this.getAttribute('id'))] = 'X';
+                document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 2</strong>, make your move'
             } else {
                 currentPlayer = 'X';
-                this.textContent = 'O';
+                this.innerHTML = '<i class="material-icons" id="heart">favorite</i>';
+                this.classList.add('heart');
                 this.removeEventListener('click', markXO);
                 gameBoardArray[parseInt(this.getAttribute('id'))] = 'O';
+                document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 1</strong>, make your move'
             }
             checkWinner(markXO);
         }
         for (let i = 0; i < 9; i++) {
-            document.getElementById(`${i}`).addEventListener('click', markXO)
+            document.getElementById(`${i}`).addEventListener('click', markXO);
         }
     }
 
@@ -33,76 +39,65 @@ const gameboardObj = (() => {
         for (let i = 0; i < 9; i++) {
             document.getElementById(`${i}`).addEventListener('click', checkWinner)
         }
-        function makeClicksInactiveOnGameEnd(parameter) {
+        function deactivateEventListenersOnGameEnd(parameter) {
             for (let i = 0; i < 9; i++) {
                 document.getElementById(`${i}`).removeEventListener('click', checkWinner);
                 document.getElementById(`${i}`).removeEventListener('click', parameter);
             };
         }
-        //Vertical X Win Conditions
         if ((gameBoardArray[0] === 'X' && gameBoardArray[3] === 'X' && gameBoardArray[6] === 'X') || 
             (gameBoardArray[1] === 'X' && gameBoardArray[4] === 'X' && gameBoardArray[7] === 'X') || 
             (gameBoardArray[2] === 'X' && gameBoardArray[5] === 'X' && gameBoardArray[8] === 'X')) {
-            alert('X wins!');
-            makeClicksInactiveOnGameEnd(parameter);
+            document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 1 wins!</strong>'
+            deactivateEventListenersOnGameEnd(parameter);
             return;
         }
-        //Horizontal X Win Conditions
         if ((gameBoardArray[0] === 'X' && gameBoardArray[1] === 'X' && gameBoardArray[2] === 'X') || 
             (gameBoardArray[3] === 'X' && gameBoardArray[4] === 'X' && gameBoardArray[5] === 'X') || 
             (gameBoardArray[6] === 'X' && gameBoardArray[7] === 'X' && gameBoardArray[8] === 'X')) {
-            alert('X wins!');
-            makeClicksInactiveOnGameEnd(parameter);
+            document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 1 wins!</strong>'
+            deactivateEventListenersOnGameEnd(parameter);
             return;
         }
-        //Diagonal X Win Conditions
         if ((gameBoardArray[0] === 'X' && gameBoardArray[4] === 'X' && gameBoardArray[8] === 'X') || 
             (gameBoardArray[2] === 'X' && gameBoardArray[4] === 'X' && gameBoardArray[6] === 'X')) {
-            alert('X wins!');
-            makeClicksInactiveOnGameEnd(parameter);
+            document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 1 wins!</strong>'
+            deactivateEventListenersOnGameEnd(parameter);
             return;
         }
-        //Vertical O Win Conditions
         if ((gameBoardArray[0] === 'O' && gameBoardArray[3] === 'O' && gameBoardArray[6] === 'O') || 
             (gameBoardArray[1] === 'O' && gameBoardArray[4] === 'O' && gameBoardArray[7] === 'O') || 
             (gameBoardArray[2] === 'O' && gameBoardArray[5] === 'O' && gameBoardArray[8] === 'O')) {
-            alert('O wins!');
-            makeClicksInactiveOnGameEnd(parameter);
+            document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 2 wins!</strong>'
+            deactivateEventListenersOnGameEnd(parameter);
             return;
         }
-        //Horizontal O Win Conditions
         if ((gameBoardArray[0] === 'O' && gameBoardArray[1] === 'O' && gameBoardArray[2] === 'O') || 
             (gameBoardArray[3] === 'O' && gameBoardArray[4] === 'O' && gameBoardArray[5] === 'O') || 
             (gameBoardArray[6] === 'O' && gameBoardArray[7] === 'O' && gameBoardArray[8] === 'O')) {
-            alert('O wins!');
-            makeClicksInactiveOnGameEnd(parameter);
+            document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 2 wins!</strong>'
+            deactivateEventListenersOnGameEnd(parameter);
             return;
         }
-        //Diagonal O Win Conditions
         if ((gameBoardArray[0] === 'O' && gameBoardArray[4] === 'O' && gameBoardArray[8] === 'O') || 
             (gameBoardArray[2] === 'O' && gameBoardArray[4] === 'O' && gameBoardArray[6] === 'O')) {
-            alert('O wins!');
-            makeClicksInactiveOnGameEnd(parameter);
+            document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 2 wins!</strong>'
+            deactivateEventListenersOnGameEnd(parameter);
             return;
         }
-        //Draw
         if (!gameBoardArray.includes('')){
-            makeClicksInactiveOnGameEnd(parameter);
-            alert('Draw!')
+            deactivateEventListenersOnGameEnd(parameter);
+            document.getElementById('gameStatusDisplay').innerHTML = '<strong>Tie game!</strong>'
         }
     }
 
-    return {gameBoardArray, newGameBoard, addNewGameBoxClickEvent, checkWinner};
+    return {gameBoardArray, newGameBoard, addNewGameBoxClickEvent};
 })();
 
 const playerFactory = (name) => {
     return {name};
 };
 
-/* const gameFlow = (() => {
-    
-}) */
-
 gameboardObj.newGameBoard();
-/* gameboardObj.checkWinner(); */
+
 
