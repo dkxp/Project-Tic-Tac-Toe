@@ -20,7 +20,7 @@ const gameboardObj = (() => {
     }
     function boxClickEvents(event) {
         (currentPlayer === 'X') ? markBoxAsBolt(event.target) : markBoxAsHeart(event.target);
-        switchPlayers();
+        switchCurrentPlayer();
         updateGameStatusDisplayWithPlayerTurn();
         checkIfWinnerOnClick();
     }
@@ -39,7 +39,7 @@ const gameboardObj = (() => {
     function removeEventListenersFromBoxOnClick(boxElement) {
         boxElement.removeEventListener('click', boxClickEvents);
     }
-    function switchPlayers () {
+    function switchCurrentPlayer () {
         (currentPlayer === 'X') ? currentPlayer = 'O' : currentPlayer = 'X';
     }
     function updateGameStatusDisplayWithPlayerTurn() {
