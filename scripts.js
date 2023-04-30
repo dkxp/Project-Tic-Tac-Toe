@@ -1,16 +1,16 @@
 const gameboardObj = (() => {
   const gameBoardSymbolsArray = [];
-  let currentPlayer = 'X';
+  let currentPlayer = 'Bolt';
 
   function resetBoardStatusToNew() {
-    currentPlayer = 'X';
+    currentPlayer = 'Bolt';
     for (let i = 0; i < 9; i++) {
       gameBoardSymbolsArray[i] = '';
       document.getElementById(`${i}`).innerHTML = '';
       document.getElementById(`${i}`).classList.remove('bolt');
       document.getElementById(`${i}`).classList.remove('heart');
       document.getElementById('gameStatusDisplay').innerHTML =
-        '<strong>Player 1</strong>, make your move';
+        '<strong>Bolt</strong>, make your move';
     }
     newGameAddEventListenersToBoxClick();
   }
@@ -23,7 +23,7 @@ const gameboardObj = (() => {
   }
   function boxClickEvents(event) {
     // eslint-disable-next-line no-unused-expressions
-    currentPlayer === 'X'
+    currentPlayer === 'Bolt'
       ? markBoxAsBolt(event.target)
       : markBoxAsHeart(event.target);
     switchCurrentPlayer();
@@ -36,7 +36,7 @@ const gameboardObj = (() => {
     boxElement.classList.add('bolt');
     removeEventListenersFromBoxOnClick(boxElement);
     gameBoardSymbolsArray[parseInt(boxElement.getAttribute('id'))] =
-      'X';
+      'Bolt';
   }
   function markBoxAsHeart(boxElement) {
     boxElement.innerHTML =
@@ -44,22 +44,22 @@ const gameboardObj = (() => {
     boxElement.classList.add('heart');
     removeEventListenersFromBoxOnClick(boxElement);
     gameBoardSymbolsArray[parseInt(boxElement.getAttribute('id'))] =
-      'O';
+      'Heart';
   }
   function removeEventListenersFromBoxOnClick(boxElement) {
     boxElement.removeEventListener('click', boxClickEvents);
   }
   function switchCurrentPlayer() {
-    currentPlayer === 'X'
-      ? (currentPlayer = 'O')
-      : (currentPlayer = 'X');
+    currentPlayer === 'Bolt'
+      ? (currentPlayer = 'Heart')
+      : (currentPlayer = 'Bolt');
   }
   function updateGameStatusDisplayWithPlayerTurn() {
-    currentPlayer === 'X'
+    currentPlayer === 'Bolt'
       ? (document.getElementById('gameStatusDisplay').innerHTML =
-          '<strong>Player 1</strong>, make your move')
+          '<strong>Bolt</strong>, make your move')
       : (document.getElementById('gameStatusDisplay').innerHTML =
-          '<strong>Player 2</strong>, make your move');
+          '<strong>Heart</strong>, make your move');
   }
   function deactivateEventListenersFromBoxOnGameEnd() {
     for (let i = 0; i < 9; i++) {
@@ -70,100 +70,37 @@ const gameboardObj = (() => {
   }
 
   function checkIfWinnerOnClick() {
-    if (
-      (gameBoardSymbolsArray[0] === 'X' &&
-        gameBoardSymbolsArray[3] === 'X' &&
-        gameBoardSymbolsArray[6] === 'X') ||
-      (gameBoardSymbolsArray[1] === 'X' &&
-        gameBoardSymbolsArray[4] === 'X' &&
-        gameBoardSymbolsArray[7] === 'X') ||
-      (gameBoardSymbolsArray[2] === 'X' &&
-        gameBoardSymbolsArray[5] === 'X' &&
-        gameBoardSymbolsArray[8] === 'X')
-    ) {
-      document.getElementById('gameStatusDisplay').innerHTML =
-        '<strong>Player 1 wins!</strong>';
-      deactivateEventListenersFromBoxOnGameEnd();
-      return;
+    const winningCombos = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+
+    for (const combo of winningCombos) {
+      const [a, b, c] = combo;
+      if (
+        gameBoardSymbolsArray[a] &&
+        gameBoardSymbolsArray[a] === gameBoardSymbolsArray[b] &&
+        gameBoardSymbolsArray[a] === gameBoardSymbolsArray[c]
+      ) {
+        document.getElementById(
+          'gameStatusDisplay'
+        ).innerHTML = `<strong>${gameBoardSymbolsArray[a]} wins!</strong>`;
+        deactivateEventListenersFromBoxOnGameEnd();
+        return;
+      }
     }
-    if (
-      (gameBoardSymbolsArray[0] === 'X' &&
-        gameBoardSymbolsArray[1] === 'X' &&
-        gameBoardSymbolsArray[2] === 'X') ||
-      (gameBoardSymbolsArray[3] === 'X' &&
-        gameBoardSymbolsArray[4] === 'X' &&
-        gameBoardSymbolsArray[5] === 'X') ||
-      (gameBoardSymbolsArray[6] === 'X' &&
-        gameBoardSymbolsArray[7] === 'X' &&
-        gameBoardSymbolsArray[8] === 'X')
-    ) {
-      document.getElementById('gameStatusDisplay').innerHTML =
-        '<strong>Player 1 wins!</strong>';
-      deactivateEventListenersFromBoxOnGameEnd();
-      return;
-    }
-    if (
-      (gameBoardSymbolsArray[0] === 'X' &&
-        gameBoardSymbolsArray[4] === 'X' &&
-        gameBoardSymbolsArray[8] === 'X') ||
-      (gameBoardSymbolsArray[2] === 'X' &&
-        gameBoardSymbolsArray[4] === 'X' &&
-        gameBoardSymbolsArray[6] === 'X')
-    ) {
-      document.getElementById('gameStatusDisplay').innerHTML =
-        '<strong>Player 1 wins!</strong>';
-      deactivateEventListenersFromBoxOnGameEnd();
-      return;
-    }
-    if (
-      (gameBoardSymbolsArray[0] === 'O' &&
-        gameBoardSymbolsArray[3] === 'O' &&
-        gameBoardSymbolsArray[6] === 'O') ||
-      (gameBoardSymbolsArray[1] === 'O' &&
-        gameBoardSymbolsArray[4] === 'O' &&
-        gameBoardSymbolsArray[7] === 'O') ||
-      (gameBoardSymbolsArray[2] === 'O' &&
-        gameBoardSymbolsArray[5] === 'O' &&
-        gameBoardSymbolsArray[8] === 'O')
-    ) {
-      document.getElementById('gameStatusDisplay').innerHTML =
-        '<strong>Player 2 wins!</strong>';
-      deactivateEventListenersFromBoxOnGameEnd();
-      return;
-    }
-    if (
-      (gameBoardSymbolsArray[0] === 'O' &&
-        gameBoardSymbolsArray[1] === 'O' &&
-        gameBoardSymbolsArray[2] === 'O') ||
-      (gameBoardSymbolsArray[3] === 'O' &&
-        gameBoardSymbolsArray[4] === 'O' &&
-        gameBoardSymbolsArray[5] === 'O') ||
-      (gameBoardSymbolsArray[6] === 'O' &&
-        gameBoardSymbolsArray[7] === 'O' &&
-        gameBoardSymbolsArray[8] === 'O')
-    ) {
-      document.getElementById('gameStatusDisplay').innerHTML =
-        '<strong>Player 2 wins!</strong>';
-      deactivateEventListenersFromBoxOnGameEnd();
-      return;
-    }
-    if (
-      (gameBoardSymbolsArray[0] === 'O' &&
-        gameBoardSymbolsArray[4] === 'O' &&
-        gameBoardSymbolsArray[8] === 'O') ||
-      (gameBoardSymbolsArray[2] === 'O' &&
-        gameBoardSymbolsArray[4] === 'O' &&
-        gameBoardSymbolsArray[6] === 'O')
-    ) {
-      document.getElementById('gameStatusDisplay').innerHTML =
-        '<strong>Player 2 wins!</strong>';
-      deactivateEventListenersFromBoxOnGameEnd();
-      return;
-    }
+
     if (!gameBoardSymbolsArray.includes('')) {
-      deactivateEventListenersFromBoxOnGameEnd();
       document.getElementById('gameStatusDisplay').innerHTML =
-        '<strong>Tie game!</strong>';
+        "<strong>It's a draw!</strong>";
+      deactivateEventListenersFromBoxOnGameEnd();
+      return;
     }
   }
   return {
