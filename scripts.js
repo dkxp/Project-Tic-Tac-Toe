@@ -1,97 +1,106 @@
 const gameboardObj = (() => {
-    let gameBoardArray = [];
-    function newGameBoard () {
+    let gameBoardSymbolsArray = [];
+    let currentPlayer = 'X';
+
+    function resetBoardStatusToNew () {
+        currentPlayer = 'X';
         for (let i = 0; i < 9; i++) {
-            gameBoardArray[i] = '';
+            gameBoardSymbolsArray[i] = '';
             document.getElementById(`${i}`).innerHTML = '';
             document.getElementById(`${i}`).classList.remove('bolt');
             document.getElementById(`${i}`).classList.remove('heart');
             document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 1</strong>, make your move';
         }
-        addNewGameBoxClickEvent();
+        newGameAddEventListenersToBoxClick();
     }
-    function addNewGameBoxClickEvent() {
-        let currentPlayer = 'X';
-        function markXO() {
-            if (currentPlayer === 'X') {
-                currentPlayer = '0';
-                this.innerHTML = '<i class="material-icons" id="bolt">bolt</i>';
-                this.classList.add('bolt');
-                this.removeEventListener('click', markXO);
-                gameBoardArray[parseInt(this.getAttribute('id'))] = 'X';
-                document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 2</strong>, make your move'
-            } else {
-                currentPlayer = 'X';
-                this.innerHTML = '<i class="material-icons" id="heart">favorite</i>';
-                this.classList.add('heart');
-                this.removeEventListener('click', markXO);
-                gameBoardArray[parseInt(this.getAttribute('id'))] = 'O';
-                document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 1</strong>, make your move'
-            }
-            checkWinner(markXO);
-        }
+    function newGameAddEventListenersToBoxClick() {
         for (let i = 0; i < 9; i++) {
-            document.getElementById(`${i}`).addEventListener('click', markXO);
+            document.getElementById(`${i}`).addEventListener('click', boxClickEvents);
         }
     }
-    function checkWinner(parameter) {
+    function boxClickEvents(event) {
+        (currentPlayer === 'X') ? markBoxAsBolt(event.target) : markBoxAsHeart(event.target);
+        switchPlayers();
+        updateGameStatusDisplayWithPlayerTurn();
+        checkIfWinnerOnClick();
+    }
+    function markBoxAsBolt (boxElement) {
+        boxElement.innerHTML = '<i class="material-icons" id="bolt">bolt</i>';
+        boxElement.classList.add('bolt');
+        removeEventListenersFromBoxOnClick(boxElement);
+        gameBoardSymbolsArray[parseInt(boxElement.getAttribute('id'))] = 'X';
+    }
+    function markBoxAsHeart (boxElement) {
+        boxElement.innerHTML = '<i class="material-icons" id="heart">favorite</i>';
+        boxElement.classList.add('heart');
+        removeEventListenersFromBoxOnClick(boxElement);
+        gameBoardSymbolsArray[parseInt(boxElement.getAttribute('id'))] = 'O';
+    }
+    function removeEventListenersFromBoxOnClick(boxElement) {
+        boxElement.removeEventListener('click', boxClickEvents);
+    }
+    function switchPlayers () {
+        (currentPlayer === 'X') ? currentPlayer = 'O' : currentPlayer = 'X';
+    }
+    function updateGameStatusDisplayWithPlayerTurn() {
+        (currentPlayer === 'X') ? document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 1</strong>, make your move' : document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 2</strong>, make your move';
+    }
+    function deactivateEventListenersFromBoxOnGameEnd() {
         for (let i = 0; i < 9; i++) {
-            document.getElementById(`${i}`).addEventListener('click', checkWinner)
-        }
-        function deactivateEventListenersOnGameEnd(parameter) {
-            for (let i = 0; i < 9; i++) {
-                document.getElementById(`${i}`).removeEventListener('click', checkWinner);
-                document.getElementById(`${i}`).removeEventListener('click', parameter);
-            };
-        }
-        if ((gameBoardArray[0] === 'X' && gameBoardArray[3] === 'X' && gameBoardArray[6] === 'X') || 
-            (gameBoardArray[1] === 'X' && gameBoardArray[4] === 'X' && gameBoardArray[7] === 'X') || 
-            (gameBoardArray[2] === 'X' && gameBoardArray[5] === 'X' && gameBoardArray[8] === 'X')) {
+            removeEventListenersFromBoxOnClick(document.getElementById(`${i}`));
+        };
+    }
+
+    function checkIfWinnerOnClick() {
+        if ((gameBoardSymbolsArray[0] === 'X' && gameBoardSymbolsArray[3] === 'X' && gameBoardSymbolsArray[6] === 'X') || 
+            (gameBoardSymbolsArray[1] === 'X' && gameBoardSymbolsArray[4] === 'X' && gameBoardSymbolsArray[7] === 'X') || 
+            (gameBoardSymbolsArray[2] === 'X' && gameBoardSymbolsArray[5] === 'X' && gameBoardSymbolsArray[8] === 'X')) {
             document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 1 wins!</strong>'
-            deactivateEventListenersOnGameEnd(parameter);
+            deactivateEventListenersFromBoxOnGameEnd();
             return;
         }
-        if ((gameBoardArray[0] === 'X' && gameBoardArray[1] === 'X' && gameBoardArray[2] === 'X') || 
-            (gameBoardArray[3] === 'X' && gameBoardArray[4] === 'X' && gameBoardArray[5] === 'X') || 
-            (gameBoardArray[6] === 'X' && gameBoardArray[7] === 'X' && gameBoardArray[8] === 'X')) {
+        if ((gameBoardSymbolsArray[0] === 'X' && gameBoardSymbolsArray[1] === 'X' && gameBoardSymbolsArray[2] === 'X') || 
+            (gameBoardSymbolsArray[3] === 'X' && gameBoardSymbolsArray[4] === 'X' && gameBoardSymbolsArray[5] === 'X') || 
+            (gameBoardSymbolsArray[6] === 'X' && gameBoardSymbolsArray[7] === 'X' && gameBoardSymbolsArray[8] === 'X')) {
             document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 1 wins!</strong>'
-            deactivateEventListenersOnGameEnd(parameter);
+            deactivateEventListenersFromBoxOnGameEnd();
             return;
         }
-        if ((gameBoardArray[0] === 'X' && gameBoardArray[4] === 'X' && gameBoardArray[8] === 'X') || 
-            (gameBoardArray[2] === 'X' && gameBoardArray[4] === 'X' && gameBoardArray[6] === 'X')) {
+        if ((gameBoardSymbolsArray[0] === 'X' && gameBoardSymbolsArray[4] === 'X' && gameBoardSymbolsArray[8] === 'X') || 
+            (gameBoardSymbolsArray[2] === 'X' && gameBoardSymbolsArray[4] === 'X' && gameBoardSymbolsArray[6] === 'X')) {
             document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 1 wins!</strong>'
-            deactivateEventListenersOnGameEnd(parameter);
+            deactivateEventListenersFromBoxOnGameEnd();
             return;
         }
-        if ((gameBoardArray[0] === 'O' && gameBoardArray[3] === 'O' && gameBoardArray[6] === 'O') || 
-            (gameBoardArray[1] === 'O' && gameBoardArray[4] === 'O' && gameBoardArray[7] === 'O') || 
-            (gameBoardArray[2] === 'O' && gameBoardArray[5] === 'O' && gameBoardArray[8] === 'O')) {
+        if ((gameBoardSymbolsArray[0] === 'O' && gameBoardSymbolsArray[3] === 'O' && gameBoardSymbolsArray[6] === 'O') || 
+            (gameBoardSymbolsArray[1] === 'O' && gameBoardSymbolsArray[4] === 'O' && gameBoardSymbolsArray[7] === 'O') || 
+            (gameBoardSymbolsArray[2] === 'O' && gameBoardSymbolsArray[5] === 'O' && gameBoardSymbolsArray[8] === 'O')) {
             document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 2 wins!</strong>'
-            deactivateEventListenersOnGameEnd(parameter);
+            deactivateEventListenersFromBoxOnGameEnd();
             return;
         }
-        if ((gameBoardArray[0] === 'O' && gameBoardArray[1] === 'O' && gameBoardArray[2] === 'O') || 
-            (gameBoardArray[3] === 'O' && gameBoardArray[4] === 'O' && gameBoardArray[5] === 'O') || 
-            (gameBoardArray[6] === 'O' && gameBoardArray[7] === 'O' && gameBoardArray[8] === 'O')) {
+        if ((gameBoardSymbolsArray[0] === 'O' && gameBoardSymbolsArray[1] === 'O' && gameBoardSymbolsArray[2] === 'O') || 
+            (gameBoardSymbolsArray[3] === 'O' && gameBoardSymbolsArray[4] === 'O' && gameBoardSymbolsArray[5] === 'O') || 
+            (gameBoardSymbolsArray[6] === 'O' && gameBoardSymbolsArray[7] === 'O' && gameBoardSymbolsArray[8] === 'O')) {
             document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 2 wins!</strong>'
-            deactivateEventListenersOnGameEnd(parameter);
+            deactivateEventListenersFromBoxOnGameEnd();
             return;
         }
-        if ((gameBoardArray[0] === 'O' && gameBoardArray[4] === 'O' && gameBoardArray[8] === 'O') || 
-            (gameBoardArray[2] === 'O' && gameBoardArray[4] === 'O' && gameBoardArray[6] === 'O')) {
+        if ((gameBoardSymbolsArray[0] === 'O' && gameBoardSymbolsArray[4] === 'O' && gameBoardSymbolsArray[8] === 'O') || 
+            (gameBoardSymbolsArray[2] === 'O' && gameBoardSymbolsArray[4] === 'O' && gameBoardSymbolsArray[6] === 'O')) {
             document.getElementById('gameStatusDisplay').innerHTML = '<strong>Player 2 wins!</strong>'
-            deactivateEventListenersOnGameEnd(parameter);
+            deactivateEventListenersFromBoxOnGameEnd();
             return;
         }
-        if (!gameBoardArray.includes('')){
-            deactivateEventListenersOnGameEnd(parameter);
-            document.getElementById('gameStatusDisplay').innerHTML = '<strong>Tie game!</strong>'
+        if (!gameBoardSymbolsArray.includes('')){
+            deactivateEventListenersFromBoxOnGameEnd();
+            document.getElementById('gameStatusDisplay').innerHTML = '<strong>Tie game!</strong>';
         }
     }
-    return {gameBoardArray, newGameBoard, addNewGameBoxClickEvent};
+    return {gameBoardArray: gameBoardSymbolsArray, newGameBoard: resetBoardStatusToNew, addNewGameBoxClickEvent: newGameAddEventListenersToBoxClick};
 })();
 
 gameboardObj.newGameBoard();
+
 
 
